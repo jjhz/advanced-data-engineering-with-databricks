@@ -76,7 +76,7 @@ def update_silver():
                   .withColumn("processed_time", F.current_timestamp())
                   .writeStream.option("checkpointLocation", f"{DA.paths.checkpoints}/silver")
                   .trigger(availableNow=True)
-                  .table("silver"))
+                  .table("silver")) # spark table!
     
     query.awaitTermination()
 
@@ -176,9 +176,9 @@ update_silver()
 def write_twice(microBatchDF, batchId):
     appId = "write_twice"
     
-    microBatchDF.select("id", "name", F.current_timestamp().alias("processed_time")).write.option("txnVersion", batchId).option("txnAppId", appId).mode("append").saveAsTable("silver_name")
+    microBatchDF.select("id", "name", F.current_timestamp().alias("processed_time")).write.option("txnVersion", batchId).option("txnAppId", appId).mode("append").saveAsTable("silver_name") # spark table!
     
-    microBatchDF.select("id", "value", F.current_timestamp().alias("processed_time")).write.option("txnVersion", batchId).option("txnAppId", appId).mode("append").saveAsTable("silver_value")
+    microBatchDF.select("id", "value", F.current_timestamp().alias("processed_time")).write.option("txnVersion", batchId).option("txnAppId", appId).mode("append").saveAsTable("silver_value") # spark table!
 
 
 def split_stream():
