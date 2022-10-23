@@ -8,6 +8,12 @@
 # COMMAND ----------
 
 # MAGIC %md
+# MAGIC # 注意，这里是有bronze表是通过sql创建的，bronze表是hive表
+# MAGIC # silver和其他的大部分都是spark表
+
+# COMMAND ----------
+
+# MAGIC %md
 # MAGIC # Streaming Design Patterns
 # MAGIC 
 # MAGIC The Lakehouse has been designed from the beginning to work seamlessly with datasets that grow infinitely over time. While Spark Structured Streaming is often positioned as a near real-time data processing solution, it combines with Delta Lake to also provide easy batch processing of incremental data while drastically simplifying the overhead required to track data changes over time.
@@ -118,6 +124,11 @@ update_silver()
 
 # COMMAND ----------
 
+# MAGIC %sql
+# MAGIC select * from bronze;
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ... and re-executing the incremental batch processing code.
 
@@ -148,6 +159,17 @@ update_silver()
 # MAGIC The code below first defines the custom writer logic to append records to two new tables, and then demonstrates using this function within **`foreachBatch`**.
 # MAGIC 
 # MAGIC There is some debate as to whether you should use foreachBatch to write to multiple tables or to simply use multiple streams.  Generally multiple streams is the simpler and more efficient design because it allows streaming jobs writing to each table to run independently of each other.  Whereas using foreachBatch to write to multiple tables has the advantage of keeping writes to the two tables in sync.
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC 
+# MAGIC ## 逻辑上没什么问题很好理解
+# MAGIC ## 注意这里是从hive table转换成了spark table，因为每个mini batch是一个rdd
+# MAGIC ## 至于这两个参数txnVersion和txnAppId为什么要填？
+# MAGIC ## 可以理解为这就是databricks的spark如何实现idempotent的
+# MAGIC ## 因为这里操作的普通rdd，而不是streaming rdd
+# MAGIC ## 之前.table()方法里可能已经实现了添加这两个参数了
 
 # COMMAND ----------
 
