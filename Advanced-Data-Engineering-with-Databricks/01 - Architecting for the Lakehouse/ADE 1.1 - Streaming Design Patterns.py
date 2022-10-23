@@ -387,7 +387,7 @@ update_key_value()
 # COMMAND ----------
 
 def upsert_cdc(microBatchDF, batchID):
-    microBatchDF.createTempView("bronze_batch")
+    microBatchDF.createTempView("bronze_batch") #建立起一个spark table和hive table的桥梁。可以用更复杂的hive语言来实现cdc
     
     query = """
         MERGE INTO silver_status s
@@ -402,7 +402,7 @@ def upsert_cdc(microBatchDF, batchID):
           VALUES (b.user_id, b.status, b.processed_timestamp)
     """
     
-    microBatchDF._jdf.sparkSession().sql(query)
+    microBatchDF._jdf.sparkSession().sql(query)# 只是一个拿spark session的办法，因为这是在一个方法里，要不然还要传一个sc，很难看
     
 def streaming_merge():
     query = (spark.readStream
