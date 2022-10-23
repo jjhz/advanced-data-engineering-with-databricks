@@ -435,6 +435,8 @@ streaming_merge()
 
 # MAGIC %md
 # MAGIC Inserting new records will allow us to then apply these changes to our silver data.
+# MAGIC 
+# MAGIC 同一个id，有多个update，到底哪个update是最新的？？
 
 # COMMAND ----------
 
