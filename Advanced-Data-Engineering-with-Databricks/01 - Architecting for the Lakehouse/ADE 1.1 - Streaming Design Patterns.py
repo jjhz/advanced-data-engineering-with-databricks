@@ -509,6 +509,9 @@ query = stream_stream_join()
 
 # COMMAND ----------
 
+#大致意思是：防止学生觉得困惑，因为streaming需要等待一写时间才会process。
+#通过这个方法保证在方法结束后，streaming一定processed一些batch
+
 def block_until_stream_is_ready(query, min_batches=2):
     import time
     while len(query.recentProgress) < min_batches:
