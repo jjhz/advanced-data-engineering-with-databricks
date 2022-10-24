@@ -8,6 +8,15 @@
 # COMMAND ----------
 
 # MAGIC %md
+# MAGIC # 这个notebook：
+# MAGIC * 这个notebook就是基于前一个kafka raw的3topic大表，把bpm这个topic里的东西拿出来，做成一个silver表（bmp是有关heart rate的，所以就是heart rate silver表）
+# MAGIC * 其中kafka的key的values包含信息，注意一下是怎么把binary cast的
+# MAGIC * 提供了2种实现，一种是batch一种是streming
+# MAGIC * 都没什么可说的
+
+# COMMAND ----------
+
+# MAGIC %md
 # MAGIC # Streaming from Multiplex Bronze
 # MAGIC 
 # MAGIC In this notebook, you will configure a query to consume and parse raw data from a single topic as it lands in the multiplex bronze table configured in the last lesson. We'll continue refining this query in the following notebooks.
@@ -114,6 +123,8 @@ display(batch_df)
 # COMMAND ----------
 
 # MAGIC %sql
+# MAGIC -- 到这里batch就结束了
+# MAGIC 
 # MAGIC SELECT v.*
 # MAGIC FROM (
 # MAGIC   SELECT from_json(cast(value AS STRING), "device_id LONG, time TIMESTAMP, heartrate DOUBLE") v
@@ -170,6 +181,10 @@ for stream in spark.streams.active:
 # COMMAND ----------
 
 # MAGIC %sql
+# MAGIC -- 为什么要这个temp view？其实就是让你用sql做transformation的。
+# MAGIC -- 不用也完全可以，直接用rdd的版本下面有提供
+# MAGIC 
+# MAGIC 
 # MAGIC CREATE OR REPLACE TEMPORARY VIEW TEMP_SILVER AS
 # MAGIC   SELECT v.*
 # MAGIC   FROM (
@@ -201,6 +216,7 @@ query.awaitTermination()
 
 # COMMAND ----------
 
+# rdd的版本，完全不用sql那么麻烦！！各种view什么的
 from pyspark.sql import functions as F
 
 json_schema = "device_id LONG, time TIMESTAMP, heartrate DOUBLE"
