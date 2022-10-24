@@ -53,6 +53,7 @@
 
 # MAGIC %sql
 # MAGIC 
+# MAGIC 
 # MAGIC CREATE TABLE bronze 
 # MAGIC (id INT, name STRING, value DOUBLE); 
 # MAGIC 
