@@ -8,6 +8,18 @@
 # COMMAND ----------
 
 # MAGIC %md
+# MAGIC 
+# MAGIC ## 这个notebook做的是：
+# MAGIC * 有一个pre－defind的table，叫做date_lookup
+# MAGIC * 这个date_lookup包含了2019－12－01和2019－48
+# MAGIC * 代表每一天，和这一天是week几
+# MAGIC * 然后有一个json data，这个是主要的table
+# MAGIC * 要把json data和date_lookup表join
+# MAGIC * 然后是一个streaming join batch，就这样了
+
+# COMMAND ----------
+
+# MAGIC %md
 # MAGIC # Auto Load Data to Multiplex Bronze
 # MAGIC 
 # MAGIC The chief architect has decided that rather than connecting directly to Kafka, a source system will send raw records as JSON files to cloud object storage. In this notebook, you'll build a multiplex table that will ingest these records with Auto Loader and store the entire history of this incremental feed. The initial table will store data from all of our topics and have the following schema. 
