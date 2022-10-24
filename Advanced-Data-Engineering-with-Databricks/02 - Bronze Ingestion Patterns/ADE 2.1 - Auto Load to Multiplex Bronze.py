@@ -9,13 +9,19 @@
 
 # MAGIC %md
 # MAGIC 
-# MAGIC ## 这个notebook做的是：
+# MAGIC # 这个notebook做的是：
 # MAGIC * 有一个pre－defind的table，叫做date_lookup
 # MAGIC * 这个date_lookup包含了2019－12－01和2019－48
 # MAGIC * 代表每一天，和这一天是week几
-# MAGIC * 然后有一个json data，这个是主要的table
-# MAGIC * 要把json data和date_lookup表join
-# MAGIC * 然后是一个streaming join batch，就这样了
+# MAGIC * 然后有一个json data，这个是主要的数据
+# MAGIC * 这个table是一个raw的kakfa格式的信息流
+# MAGIC * 因为这里没有kafka，所以用json格式的kafka数据流文件来模拟
+# MAGIC * kafka里面有3个topic（bpm，workout，user_info），代表了3个table（这里就体现了multiplex架构，多个原始table流入对应的kafka topic，然后用一个streaming来读取）
+# MAGIC * 要把kafka json data和date_lookup表join
+# MAGIC * 然后是一个streaming join batch
+# MAGIC * 这样，经过enrich的kafka json数据就被保存在了一个大表里面，这个大表就叫做brozne table。
+# MAGIC * 注意：bronze table虽说是一个表，但是保存了3个表的数据，这就是bronze table的意义。因为kafka并不是一个可靠的持久化储存系统，实时的将kafka数据导入到持久化的table里面，就是bronze table的意义
+# MAGIC * 在下一个notebook，会实现如何把这个大表进行分流
 
 # COMMAND ----------
 
