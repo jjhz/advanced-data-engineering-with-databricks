@@ -8,6 +8,16 @@
 # COMMAND ----------
 
 # MAGIC %md
+# MAGIC # 这个notebook的东西：说白了就是如何去重：
+# MAGIC * 去重主要有2点：micro batch中去重，目标table中去重。
+# MAGIC * 上面2点都达到了，才能去重。
+# MAGIC * batch中去重，用rdd中的dropDuplicates
+# MAGIC * 目标table中去重，用for each batch：还是用batch取得spark session，然后写merge sql语句那套方法。
+# MAGIC * class Upsert:看一下，很巧妙，用了一个temp view过渡
+
+# COMMAND ----------
+
+# MAGIC %md
 # MAGIC # Streaming Deduplication
 # MAGIC 
 # MAGIC In this notebook, you'll learn how to eliminate duplicate records while working with Structured Streaming and Delta Lake. While Spark Structured Streaming provides exactly-once processing guarantees, many source systems will introduce duplicate records, which must be removed in order for joins and updates to produce logically correct results in downstream queries.
